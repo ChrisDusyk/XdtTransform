@@ -5,7 +5,7 @@ using XdtTransform.Impl;
 namespace XdtTransform.Tests
 {
     [TestClass]
-    public class XdtTransform
+    public class XdtTransformerTests
     {
         const String GenericSourceXml = @"<?xml version=""1.0""?>
 <configuration>
@@ -20,6 +20,11 @@ namespace XdtTransform.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_not_accept_a_null_source_parameter()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             XdtTransformer.Current.Transform(null, GenericTransformXml);
         }
 
@@ -27,6 +32,11 @@ namespace XdtTransform.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_not_accept_an_empty_source_parameter()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             XdtTransformer.Current.Transform(String.Empty, GenericTransformXml);
         }
 
@@ -34,6 +44,11 @@ namespace XdtTransform.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_not_accept_a_null_transform_parameter()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             XdtTransformer.Current.Transform(GenericSourceXml, null);
         }
 
@@ -46,17 +61,20 @@ namespace XdtTransform.Tests
 
         #endregion
 
-        #region Simple Usgae
+        #region Simple Usage
 
         [TestCategory("Simple Usage"), TestMethod]
         public void Should_handle_simple_transform()
         {
+            // Arrange
             var source = GenericSourceXml;
             var transform = GenericTransformXml;
             var expected = GenericSourceXml;
 
+            // Act
             var actual = XdtTransformer.Current.Transform(source, transform);
 
+            // Assert
             Assert.IsTrue(!String.IsNullOrEmpty(actual), "Should not return null or empty value.");
             Assert.AreEqual(expected, actual, "Actual did not match expected result.");
         }
