@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Library'">
+    <OutputPath>bin\Library\</OutputPath>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
@@ -51,7 +55,7 @@
     <Compile Include="Impl\IXdtTransformer.cs" />
     <Compile Include="Impl\XdtTransformer.cs" />
     <Compile Include="Impl\XdtTransformException.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Program.cs" Condition="'$(Configuration)' != 'Library'" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +63,33 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF "$(ConfigurationName)" == "Debug" (
+
+  ECHO Source File:
+  TYPE "$(SolutionDir)\web.config"
+  ECHO.
+
+  ECHO Transform File:
+  TYPE "$(SolutionDir)\web.Debug.config"
+  ECHO.
+
+  IF EXIST "$(TargetDir)\web.Final.config" (
+    DEL /q "$(TargetDir)\web.Final.config"
+  )
+
+  ECHO Performing transform...
+  "$(TargetPath)" -s "$(SolutionDir)\web.config" -t "$(SolutionDir)\web.Debug.config" -d "$(TargetDir)\web.Final.config"
+  ECHO.
+
+  ECHO Destination File:
+  TYPE "$(TargetDir)\web.Final.config"
+  ECHO.
+
+  ECHO Performing cleanup...
+  DEL /q "$(TargetDir)\web.final.config"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

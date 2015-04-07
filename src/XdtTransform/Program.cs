@@ -1,24 +1,69 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using System;
+using System.IO;
+using XdtTransform.Impl;
 
 namespace XdtTransform
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
             var options = new Options();
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-
+                try
+                {
+                    var program = new Program(options);
+                    program.Process();
+                }
+                catch (XdtTransformException tex)
+                {
+                    Console.WriteLine("Error transforming file: {0}", tex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unexpected exception: {0}", ex.Message);
+                }
             }
             Environment.Exit(1);
         }
 
-        private void Process(Options options)
-        {
+        private readonly Options options;
 
+        public Program(Options options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException("options");
+            }
+            if (!File.Exists(options.Source))
+            {
+                throw new ApplicationException("Source file does not exist.");
+            }
+            if (!File.Exists(options.Transform))
+            {
+                throw new ApplicationException("Transform file does not exist.");
+            }
+
+            this.options = options;
+        }
+
+        private void Process()
+        {
+            var sourceXml = File.ReadAllText(this.options.Source);
+            var transformXml = File.ReadAllText(this.options.Transform);
+
+            using (var destination = File.Open(this.options.Destination, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                using (var writer = new StreamWriter(destination))
+                {
+                    var resultXml = XdtTransformer.Current.Transform(sourceXml, transformXml);
+                    writer.Write(resultXml);
+                    writer.Flush();
+                }
+            }
         }
     }
 
