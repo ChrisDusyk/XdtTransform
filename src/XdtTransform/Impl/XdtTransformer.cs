@@ -58,14 +58,14 @@ namespace XdtTransform.Impl
                         }
                         else
                         {
-                            throw new XdtTransformException("Unable to transform");
+                            throw new XdtTransformException("Unable to transform - failed to apply");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new XdtTransformException("Unable to transform", ex);
+                throw new XdtTransformException($"Unable to transform, exception {ex.Message}", ex);
             }
         }
 
