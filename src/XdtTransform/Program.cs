@@ -32,7 +32,7 @@ namespace XdtTransform
 					logger.Error(ex, $"Unexpected exception: {ex.Message}");
 				}
 			}
-			Environment.Exit(1);
+			Environment.Exit(0);
 		}
 
 		private readonly Options options;
