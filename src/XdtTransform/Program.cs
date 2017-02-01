@@ -27,7 +27,7 @@ namespace XdtTransform
                     Console.WriteLine("Unexpected exception: {0}", ex.Message);
                 }
             }
-            Environment.Exit(1);
+            Environment.Exit(0);
         }
 
         private readonly Options options;
