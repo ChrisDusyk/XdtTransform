@@ -60,7 +60,7 @@ namespace XdtTransform
 			var sourceXml = File.ReadAllText(this.options.Source);
 			var transformXml = File.ReadAllText(this.options.Transform);
 
-			using (var destination = File.Open(this.options.Destination, FileMode.OpenOrCreate, FileAccess.Write))
+			using (var destination = File.Open(this.options.Destination, FileMode.Create, FileAccess.Write))
 			{
 				using (var writer = new StreamWriter(destination))
 				{
