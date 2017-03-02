@@ -25,11 +25,13 @@ namespace XdtTransform
 				{
 					Console.WriteLine("Error transforming file: {0}", tex.Message);
 					logger.Error(tex, $"Error transforming file: {tex.Message}");
+					Environment.Exit(1);
 				}
 				catch (Exception ex)
 				{
 					Console.WriteLine("Unexpected exception: {0}", ex.Message);
 					logger.Error(ex, $"Unexpected exception: {ex.Message}");
+					Environment.Exit(1);
 				}
 			}
 			Environment.Exit(0);
